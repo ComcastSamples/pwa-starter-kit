@@ -20,12 +20,12 @@ This step is automated for you by the `npm run build` script, but in case you wa
 
 Feature  | Action needed | On what browsers|
  ------------ | :-----------: | -----------: |
-Custom Elements | [Polyfill](https://github.com/webcomponents/webcomponentsjs) | [IE11, Edge, Firefox, Safari<11](https://caniuse.com/#feat=custom-elementsv1) |
-Shadow DOM | [Polyfill](https://github.com/webcomponents/webcomponentsjs) | [IE11, Edge, Firefox, Safari<11](https://caniuse.com/#feat=shadowdomv1)|
+Custom Elements | [Polyfill](https://github.com/webcomponents/webcomponentsjs) | [IE11, Edge, Safari<11](https://caniuse.com/#feat=custom-elementsv1) |
+Shadow DOM | [Polyfill](https://github.com/webcomponents/webcomponentsjs) | [IE11, Edge, Safari<11](https://caniuse.com/#feat=shadowdomv1)|
 Class syntax | Transpile (babel), extra [adapter](https://github.com/webcomponents/webcomponentsjs#custom-elements-es5-adapterjs) for Custom Elements/Shadow DOM | [IE11](https://caniuse.com/#feat=es6-class) |
 Promises | [Polyfill](https://github.com/stefanpenner/es6-promise)| [IE11](https://caniuse.com/#feat=promises) |
 `fetch()`  |   [Polyfill](https://github.com/github/fetch)   |         [IE11, iOS <10.2](https://caniuse.com/#feat=fetch) |
 Object rest/spread properties |   Transpile (babel)    | [IE11, Edge, Safari<11.1](http://kangax.github.io/compat-table/es2016plus/#test-object_rest/spread_properties) |
-JS modules | Polyfill | [IE11, Firefox, iOS <10.3](https://caniuse.com/#feat=es6-module) |
+JS modules | Polyfill | [IE11, iOS <10.3](https://caniuse.com/#feat=es6-module) |
 Dynamic JS modules (`import()`) | Polyfill, a module loader (webpack) | |
 `async`/`await` | Transpile (babel) | [IE11](https://caniuse.com/#feat=async-functions)|
