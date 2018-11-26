@@ -46,13 +46,13 @@ Checkout the [folder structure]({{site.baseurl}}/configuring-and-personalizing#f
 To create a new app based on one of the other templates listed in [Other templates]({{site.baseurl}}/overview#other-templates), you can clone the appropriate branch from the `pwa-starter-kit` repo:
 
 ```
-git clone --depth 1 -b <template-name> --single-branch https://github.com/Polymer/pwa-starter-kit my-app
+git clone --depth 1 -b <template-name> --single-branch https://github.com/Polymer/pwa-starter-kit <folder-name>
 ```
 
 For example, to start from No-Redux template (`template-no-redux`):
 
 ```
-git clone --depth 1 -b template-no-redux --single-branch https://github.com/Polymer/pwa-starter-kit my-app
+git clone --depth 1 -b template-no-redux --single-branch https://github.com/Polymer/pwa-starter-kit my-app-no-redux
 ```
 
 ### Installing dependencies
