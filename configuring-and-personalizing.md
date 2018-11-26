@@ -94,12 +94,7 @@ class SampleElement extends LitElement {
   }
 
   render() {
-    // Note the use of the object spread to explicitely
-    // call out which properties you're using for rendering.
-    const {publicProperty, _privateProperty} = this;
-
     // Anything code that is related to rendering should be done in here.
-
     return html`
       <!-- your element's template goes here -->
     `;
