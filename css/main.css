@@ -1,16 +1,16 @@
 /* Theme colors */
 a {
-  color: #6700DF;
+  color: #d72a15;
 }
 
 .hero {
-  background: #6700DF;
-  background: linear-gradient(315deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%), linear-gradient(315deg, #AF6AFF 0%, #6700DF 100%);
+  background: #d72a15;
+  background: linear-gradient(315deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%), linear-gradient(315deg, #ff9271 0%, #d72a15 100%);
 }
 
 .main-nav {
-  background: #6700DF;
-  background: linear-gradient(315deg, #AF6AFF 0%, #6700DF 100%);
+  background: #d72a15;
+  background: linear-gradient(315deg, #ff9271 0%, #d72a15 100%);
 }
 
 .hero .hero-title,
@@ -38,7 +38,7 @@ body {
 }
 
 a {
-  color: #6711df;
+  color: #d72a15;
   text-decoration: none;
 }
 
@@ -375,7 +375,7 @@ th, td {
     font-size: 56px;
     line-height: 64px;
   }
-  
+
   .hero .hero-caption {
     font-size: 22px;
     line-height: 32px;
@@ -437,7 +437,7 @@ th, td {
   .side-nav + article {
     margin-top: 56px;
   }
-  
+
   .wrapper {
     padding-left: 20px;
     padding-right: 20px;
