@@ -17,6 +17,9 @@ git clone --depth 1 https://github.com/Polymer/pwa-starter-kit my-app
 cd my-app
 ```
 
+{:.fyi}
+Note: the `--depth 1` option will perform a [shallow clone](https://www.perforce.com/blog/git-beyond-basics-using-shallow-clones), which will clone only the current HEAD as opposed to pulling down the repo's entire history for that branch. As you may expect, this is a much faster operation.
+
 This will generate the initial project structure inside the `my-app` folder, which roughly looks like this:
 ```
 my-app

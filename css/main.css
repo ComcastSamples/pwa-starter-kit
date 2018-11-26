@@ -253,6 +253,15 @@ article {
   background-color: #eee;
 }
 
+.fyi {
+  border: 1px solid #fb543f;
+  margin: 20px 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: #2f0b05;
+  background-color: #ffc5b3;
+}
+
 .prevnext {
   display: flex;
   justify-content: space-between;
