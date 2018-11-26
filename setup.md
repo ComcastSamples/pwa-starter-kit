@@ -49,10 +49,10 @@ To create a new app based on one of the other templates listed in [Other templat
 git clone --depth 1 -b <template-name> --single-branch https://github.com/Polymer/pwa-starter-kit my-app
 ```
 
-For example, to start from Typescript template (`template-typescript`):
+For example, to start from No-Redux template (`template-no-redux`):
 
 ```
-git clone --depth 1 -b template-typescript --single-branch https://github.com/Polymer/pwa-starter-kit my-app
+git clone --depth 1 -b template-no-redux --single-branch https://github.com/Polymer/pwa-starter-kit my-app
 ```
 
 ### Installing dependencies
