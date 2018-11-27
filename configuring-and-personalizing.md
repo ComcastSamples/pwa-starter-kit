@@ -25,7 +25,7 @@ This page will take you through the steps you need to do to modify the app and a
   - [Theming](#theming)
 
 # Folder structure
-Your app will be initialized with a bunch of folders and files, that looks like this:
+Your app will be initialized with a bunch of folders and files, that looks like this for the default template:
 ```
 my-app
 ├── images
@@ -153,12 +153,14 @@ class MyView4 extends PageViewElement {
 window.customElements.define('my-view4', MyView4);
 ```
 
+Feel free to make that content a little more interesting.
+
 (🔎This page extends `PageViewElement` rather than `LitElement` as an optimization; for more details on that, check out the [conditional rendering]({{site.baseurl}}/configuring-and-personalizing#conditionally-rendering-views) section).
 
 ### Adding the page to the application
 Great! Now we that we have our new element, we need to add it to the application!
 
-First, add it to each of the list of nav links. In the toolbar (the wide-screen view) add:
+First, add it to each of the list of nav links [in my-app.js](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-app.js#L190-L194). In the toolbar (the wide-screen view) add:
 ```html
 <nav class="toolbar-list">
   ...
@@ -228,12 +230,16 @@ You can inline an `<svg>` directly where you need it in the page, but if there's
 like to define once and use in several places, `my-icons.js` is a good spot for that. To add a new icon, you
 can just add a new line to that file:
 ```js
-export const closeIcon = html`<svg>...</svg>`
+export const closeIcon = html`<svg height="24" viewBox="0 0 24 24" width="24">
+  <path d="M0 0h24v24H0z" fill="none"/>
+  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+</svg>`
 ```
 
 Then, you can import it and use it as a template literal in an element's `render()` method:
 ```js
 import { closeIcon } from './my-icons.js';
+
 render() {
   return html`
     <button title="close">${closeIcon}</button>
@@ -241,8 +247,10 @@ render() {
 }
 ```
 
+Try adding that to the content of your MyView4 so you can see how it works.
+
 ## Sharing styles
-Similarly, shared styles are also just exported template literals. If you take a look at `shared-styles.js`, it
+Similarly, shared styles are also just exported template literals. If you take a look at [`shared-styles.js`](https://github.com/Polymer/pwa-starter-kit/tree/master/src/components/shared-styles.js), it
 exports a `<style>` node template, that is then inlined in an element's `render()` method:
 ```js
 import { SharedStyles } from './shared-styles.js';
