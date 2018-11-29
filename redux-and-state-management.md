@@ -272,7 +272,7 @@ We use a very simple (but flexible) redux-friendly router, that uses the window 
 ```js
 import { installRouter } from '@polymer/pwa-helpers/router.js';
 firstUpdated() {
-  installRouter((location) => this._locationChanged(location));
+  installRouter((location) => store.dispatch(navigate(decodeURIComponent(location.pathname))));
 }
 ```
 
@@ -469,3 +469,7 @@ store.subscribe(() => {
 ```
 
 That's it! If you want to see a demo of this in a project, the [**Flash-Cards**](https://github.com/notwaldorf/flash-cards/blob/master/src/localStorage.js) app implements this pattern.
+
+## Next step
+Now that you have a basic understanding of Redux, it's important to note that if you're building a small app, then [you might not need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367). So let's look at how we can build this same PWA without it in the next step:
+- [Customizing without Redux]({{site.baseurl}}/customizing-without-redux).

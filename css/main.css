@@ -15,6 +15,7 @@ a {
 
 .hero .hero-title,
 .hero .hero-link,
+.hero a,
 .main-nav {
   color: #fff;
 }
@@ -164,6 +165,11 @@ main {
   content: "";
 }
 
+.hero p {
+  line-height: 27px;
+  font-size: 20px;
+}
+
 .hero .hero-caption {
   max-width: 640px;
   padding-right: 10%;
@@ -260,6 +266,12 @@ article {
   border-radius: 6px;
   color: #2f0b05;
   background-color: #ffc5b3;
+}
+
+.instructions {
+  border-left: 10px solid #fb543f;
+  background-color: rgba(255,197,179,0.2);
+  padding: 8px 12px;
 }
 
 .prevnext {

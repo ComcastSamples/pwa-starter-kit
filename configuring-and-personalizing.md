@@ -13,7 +13,6 @@ This page will take you through the steps you need to do to modify the app and a
   - [Using icons](#using-icons)
   - [Sharing styles](#sharing-styles)
   - [Fonts](#fonts)
-  - [But I don't want to use Redux](#but-i-dont-want-to-use-redux)
 - [Advanced topics](#advanced-topics)
   - [Responsive layout](#responsive-layout)
   - [Conditionally rendering views](#conditionally-rendering-views)
@@ -21,8 +20,8 @@ This page will take you through the steps you need to do to modify the app and a
   - [SEO](#seo)
   - [Fetching data](#fetching-data)
   - [Responding to network state changes](#responding-to-network-state-changes)
-  - [State management](#state-management)
   - [Theming](#theming)
+  - [State management](#state-management)
 
 # Folder structure
 Your app will be initialized with a bunch of folders and files, that looks like this for the default template:
@@ -128,6 +127,8 @@ There are 4 places where the active page is used at any time:
 To add a new page, you need to add a new entry in each of these places. Note that if you only want to add an external link or button in the toolbar, then you can skip adding anything to the `<main>` element.
 
 ### Create a new page
+
+{:.instructions}
 First, let's create a new element, that will represent the new view for the page. The easiest way to do this is to copy the [`<my-view404>`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-view404.js) element, since that's a good and basic starting point:
 - Copy that file, and rename it to `my-view4.js`. We're going to assume the element's name is also `my-view4`, but if you want to use a name that makes more sense (like `about-page` or something), you can totally use that -- just make sure you are consistent!
 - In this new file, rename the class to `MyView404` to `MyView4` (in 2 places), and the element's name to `my-view4`. When you're done, it should look like this:
@@ -153,14 +154,19 @@ class MyView4 extends PageViewElement {
 window.customElements.define('my-view4', MyView4);
 ```
 
-Feel free to make that content a little more interesting.
+{:.instructions}
+Feel free to make that content in the `<section>` a little more interesting.
 
-(🔎This page extends `PageViewElement` rather than `LitElement` as an optimization; for more details on that, check out the [conditional rendering]({{site.baseurl}}/configuring-and-personalizing#conditionally-rendering-views) section).
+{:.fyi}
+🔎This page extends `PageViewElement` rather than `LitElement` as an optimization; for more details on that, check out the [conditional rendering]({{site.baseurl}}/configuring-and-personalizing#conditionally-rendering-views) section.
 
 ### Adding the page to the application
 Great! Now we that we have our new element, we need to add it to the application!
 
-First, add it to each of the list of nav links [in my-app.js](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-app.js#L190-L194). In the toolbar (the wide-screen view) add:
+First, add it to each of the list of nav links [in my-app.js](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-app.js#L190-L194).
+
+{:.instructions}
+In the toolbar (the wide-screen view) add:
 ```html
 <nav class="toolbar-list">
   ...
@@ -168,6 +174,7 @@ First, add it to each of the list of nav links [in my-app.js](https://github.com
 </nav>
 ```
 
+{:.instructions}
 Similarly, we can add it to the list of nav links in the drawer:
 ```html
 <nav class="drawer-list">
@@ -176,6 +183,7 @@ Similarly, we can add it to the list of nav links in the drawer:
 </nav>
 ```
 
+{:.instructions}
 And in the main content itself:
 ```html
 <main class="main-content">
@@ -186,7 +194,10 @@ And in the main content itself:
 
 Note that in all of these code snippets, the `selected` attribute is used to [highlight](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-app.js#L99) the active page, and the `active` attribute is also used to ensure that only the active page is [actually rendered](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/page-view-element.js#L16).
 
-Finally, we need to lazy load this page. Without this, the links will appear, but they won't be able to navigate to your new page, since `my-view4` will be undefined (we haven't imported its source code anywhere). In the [`loadPage ` action creator](https://github.com/Polymer/pwa-starter-kit/blob/master/src/actions/app.js#L29), add a new `case` statement:
+Finally, we need to lazy load this page. Without this, the links will appear, but they won't be able to navigate to your new page, since `my-view4` will be undefined (we haven't imported its source code anywhere).
+
+{:.instructions}
+In the [`loadPage ` action creator](https://github.com/Polymer/pwa-starter-kit/blob/master/src/actions/app.js#L29), add a new `case` statement:
 ```js
 switch(page) {
   ...
@@ -202,7 +213,10 @@ That's it! Now, if you refresh the page, you should be able to see the new link 
 
 ### Adding the page to the push manifest
 
-To take advantage of HTTP/2 server push, you need to specify what scripts are needed for the new page. Add a new entry to `push-manifest.json`:
+To take advantage of HTTP/2 server push, you need to specify what scripts are needed for the new page.
+
+{:.instructions}
+Add a new entry to `push-manifest.json`:
 
 ```js
 {
@@ -247,7 +261,8 @@ render() {
 }
 ```
 
-Try adding that to the content of your MyView4 so you can see how it works.
+{:.instructions}
+Try adding that `closeIcon` to the content of your MyView4 so you can see how it works.
 
 ## Sharing styles
 Similarly, shared styles are also just exported template literals. If you take a look at [`shared-styles.js`](https://github.com/Polymer/pwa-starter-kit/tree/master/src/components/shared-styles.js), it
@@ -265,11 +280,6 @@ render() {
 ## Fonts
 The app doesn't use any web fonts for the content copy, but does use a Google font for the app title. Be careful not too load too many fonts, however: aside from increasing the download size of your first page, web fonts also [slow down the performance](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/webfont-optimization) of an app, and cause flashes of unstyled content.
 
-## But I don't want to use Redux
-The `pwa-starter-kit` is supposed to be the well-lit path to building a fairly complex PWA, but it should in no way feel restrictive. If you know what you're doing, and don't want to use Redux to manage your application's state, that's totally fine! We've created a separate template, [`template-no-redux`](https://github.com/Polymer/pwa-starter-kit/tree/template-no-redux), that has the same UI and PWA elements as the main template, but does not have Redux.
-
-Instead, it uses a unidirectional data flow approach: some elements are in charge of [maintaining the state](https://github.com/Polymer/pwa-starter-kit/blob/template-no-redux/src/components/my-view2.js#L44) for their section of the application, and they [pass that data down](https://github.com/Polymer/pwa-starter-kit/blob/template-no-redux/src/components/my-view2.js#L35) to children elements. In response, when the children elements need to update the state, they [fire an event](https://github.com/Polymer/pwa-starter-kit/blob/template-no-redux/src/components/counter-element.js#L56).
-
 # Advanced topics
 
 ## Responsive layout
@@ -285,6 +295,9 @@ The rest of the styles in [`my-app`](https://github.com/Polymer/pwa-starter-kit/
 
 #### Responsive styles in JavaScript
 If you want to run specific JavaScript code when the size changes from a wide to narrow screen (for example, to make the drawer persistent, etc), you can use the [`installMediaQueryWatcher`](https://github.com/Polymer/pwa-helpers/blob/master/media-query.js) helper from `pwa-helpers`. When you [set it up](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-app.js#L244), you can specify the callback that is ran whenever the media query matches.
+
+{:.instructions}
+With our larger navigation, the 460px breakpoint appears to be too small. Make the appropriate changes in the app to set the breakpoint to 500px instead.
 
 ## Conditionally rendering views
 Which view is visible at a given time is controlled through an `active` attribute, that is set if the name of the page matches the location, and is then used for [styling](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-app.js#L148):
@@ -315,11 +328,17 @@ If this isn't the behaviour you want, and you want hidden pages to update behind
 The app uses a very [basic router](https://github.com/Polymer/pwa-helpers/blob/master/src/router.ts), that listens to changes to the `window.location`. You install the router by passing it a callback, which is a function that will be called any time the location changes:
 
 ```js
-installRouter((location) => this._locationChanged(location));
-```
-Then, whenever a link is clicked (or the user navigates back to a page), `this._locationChanged` is called with the new location. You can check the [Redux page]({{site.baseurl}}/redux-and-state-management#routing) to see how this location is stored in the Redux store.
+import { installRouter } from 'pwa-helpers/router.js';
 
-Sometimes you might need to update this location (and the Redux store) imperatively -- for example if you have custom code for link hijacking, or you're managing page navigations in a custom way. In that case, you can manually update the browser's history state yourself, and then call the `this._locationChanged` method manually (thus simulating an action from the router):
+installRouter((location) => handleNavigation(location));
+
+handleNavigation(location) {
+  // your custom logic to select the appropriate page
+}
+```
+Then, whenever a link is clicked (or the user navigates back to a page), `handleNavigation` is called with the new location. You can check the [Redux page]({{site.baseurl}}/redux-and-state-management#routing) to see how this location is stored in the Redux store.
+
+Sometimes you might need to update this location (and the Redux store) imperatively -- for example if you have custom code for link hijacking, or you're managing page navigations in a custom way. In that case, you can manually update the browser's history state yourself, and then call the `handleNavigation` method manually (thus simulating an action from the router):
 
 ```js
 // This function would get called whenever you want
@@ -328,7 +347,7 @@ Sometimes you might need to update this location (and the Redux store) imperativ
 onArticleLinkClick(page) {
   const newLocation = `/article/${page}`
   window.history.pushState({}, '', newLocation);
-  this._locationChanged(newLocation);
+  handleNavigation(newLocation);
 };
 ```
 
@@ -337,11 +356,14 @@ We've added a starting point for adding rich social graph content to each pages,
 
 This is done in two places:
 - Statically, in the [`index.html`](https://github.com/Polymer/pwa-starter-kit/blob/master/index.html#L60). These are used by the homepage, and represent any of the common metadata across all pages (for example, if you don't have a page specific description or image, etc).
-- Automatically, after you change pages, in [`my-app.js`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-app.js#L240), using the [`updateMetadata`](https://github.com/Polymer/pwa-helpers/blob/master/metadata.js) helper from `pwa-helpers`. By default, we update the URL and the title of each page, but there are multiple ways in which you can add page-specific content that depend on your apps.
+- Automatically, after you change pages, in [`my-app.js`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-app.js#L251-L255), using the [`updateMetadata`](https://github.com/Polymer/pwa-helpers/blob/master/metadata.js) helper from `pwa-helpers`. By default, we update the URL and the title of each page, but there are multiple ways in which you can add page-specific content that depend on your apps.
 
-A different approach is to update this metadata differently, depending on what page you are. For example, the **Books** doesn't update the metadata in the main [top-level element](https://github.com/PolymerLabs/books/blob/master/src/components/book-app.js#L47), but on specific sub-pages. It uses the image thumbnail of a book only on the [detail pages](https://github.com/PolymerLabs/books/blob/master/src/components/book-detail.js#L61), and adds the search query on the [explore page](https://github.com/PolymerLabs/books/blob/master/src/components/book-explore.js#L35).
+A different approach is to update this metadata differently, depending on what page you are. For example, the **Books** sample app doesn't update the metadata in the main [top-level element](https://github.com/PolymerLabs/books/blob/master/src/components/book-app.js#L47), but on specific sub-pages. It uses the image thumbnail of a book only on the [detail pages](https://github.com/PolymerLabs/books/blob/master/src/components/book-detail.js#L61), and adds the search query on the [explore page](https://github.com/PolymerLabs/books/blob/master/src/components/book-explore.js#L35).
 
 If you want to test how your site is viewed by Googlebot, Sam Li has a great [article](https://medium.com/dev-channel/polymer-2-and-googlebot-2ad50c5727dd) on gotchas to look out for -- in particular, the testing section covers a couple tools you can use, such as [Fetch as Google](https://support.google.com/webmasters/answer/6066468?hl=en) and [Mobile-Friendly Test](https://search.google.com/test/mobile-friendly).
+
+{:.fyi}
+The `updated` method used to call `updateMetadata` is one of [LitElement's lifecycle methods](https://lit-element.polymer-project.org/docs/lifecycle/methods#updated).
 
 ## Fetching data
 If you want to fetch data from an API or a different server, we recommend dispatching an action creator from a component, and making that fetch asynchronously in a Redux action. For example, the **Flash Cards** sample app dispatches a [`loadAll`](https://github.com/notwaldorf/flash-cards/blob/master/src/components/my-app.js#L148) action creator when the main element boots up; it is that action creator that then does the [actual fetch](https://github.com/notwaldorf/flash-cards/blob/master/src/components/my-app.js#L148) of the file and sends it back to the main component by adding the data to the state [in a reducer](https://github.com/notwaldorf/flash-cards/blob/master/src/reducers/data.js#L7).
@@ -353,13 +375,10 @@ You might want to change your UI as a response to the network state changing (i.
 
 Using the [`installOfflineWatcher`](https://github.com/Polymer/pwa-helpers/blob/master/network.js) helper from `pwa-helpers`, we've added a [callback](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-app.js#L243) that will be called any time we go online or offline. In particular, we've added a [snackbar](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-app.js#L219) that gets shown; you can configure its contents and style in [`snack-bar.js`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/snack-bar.js). Note that the snackbar is shown as a result of a Redux [action creator](https://github.com/Polymer/pwa-starter-kit/blob/master/src/actions/app.js#L69) being dispatched, and its duration can be configured there.
 
+{:.fyi}
+The `firstUpdated` method used to call `installOfflineWatcher` is one of [LitElement's lifecycle methods](https://lit-element.polymer-project.org/docs/lifecycle/methods#firstupdated).
+
 Rather than just using it as an FYI, you can use the offline status to display conditional UI in your application. For example, the **Books** sample app displays an [offline view](https://github.com/PolymerLabs/books/blob/master/src/components/book-offline.js) rather than the details view when the [application is offline](https://github.com/PolymerLabs/books/blob/master/src/components/book-detail.js#L293).
-
-## State management
-There are many different ways in which you can manage your application's state, and choosing the right one depends a lot on the size of your team and application. For simple applications, a uni-directional data flow pattern might be enough (the top level, `<my-app>` element could be in charge of being the source of state truth, and it could pass it down to each of the elements, as needed); if that's what you're looking for, check out the [`template-no-redux`](https://github.com/Polymer/pwa-starter-kit/tree/template-no-redux) branch.
-
-Another popular approach is [Redux](https://redux.js.org/), which keeps the state in a store outside of the app, and passes immutable copies to each element. To see how that is set up, check out the [Redux and state management]({{site.baseurl}}/redux-and-state-management) section for an explainer, and more details.
-
 
 ## Theming
 This section is useful both if you want to change the default colours of the app, or if you want to let your users be able to switch between different themes.
@@ -390,21 +409,28 @@ If you want to be able to switch between two different themes in the app (for ex
   ...
 }
 
-:host.dark-theme {
+:host(.dark-theme) {
   /* This is the dark theme */
   --app-primary-color: yellow;
   --app-secondary-color: white;
-  --app-text-color: var(--app-secondary-color);
+  --app-text-color: #293237;
+  --app-dark-text-color: #E91E63;
   --app-header-background-color: black;
-  --app-header-text-color: var(--app-text-color);
+  --app-header-text-color: var(--app-secondary-color);
   ...
 }
 ```
 
 You control when this class is added; this could be when a "use dark theme" button is clicked, or based on a hash parameter in the location, or the time of day, etc.
 
-## Next steps
-Now that you're done configuring your application, check out the next steps:
-- [Testing the performance]({{site.baseurl}}/performance-testing) of your app to ensure your users have a fast experience.
-- [General testing]({{site.baseurl}}/application-testing) your app to make sure new changes don't accidentally cause regressions.
-- [Building and deploying]({{site.baseurl}}/building-and-deploying) to production.
+{:.instructions}
+Try applying the dark theme to your app in a certain scenario, such as when your new view is active. Feel free to just do it in one of LitElement's existing lifecycle methods instead of hooking it up through Redux for now.
+
+## State management
+There are many different ways in which you can manage your application's state, and choosing the right one depends a lot on the size of your team and application. For simple applications, a uni-directional data flow pattern might be enough (the top level, `<my-app>` element could be in charge of being the source of state truth, and it could pass it down to each of the elements, as needed); if that's what you're looking for, check out the [`template-no-redux`](https://github.com/Polymer/pwa-starter-kit/tree/template-no-redux) branch that we'll get into in the [Customizing without Redux]({{site.baseurl}}/customizing-without-redux) section.
+
+Another popular approach is [Redux](https://redux.js.org/), which keeps the state in a store outside of the app, and passes immutable copies to each element. To see how that is set up, check out the [Redux and state management]({{site.baseurl}}/redux-and-state-management) section for an explainer, and more details.
+
+## Next step
+Now that you're done some basic configuring of your application, let's go ahead and check out the next step:
+- [Redux and state management]({{site.baseurl}}/redux-and-state-management).

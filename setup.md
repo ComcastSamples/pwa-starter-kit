@@ -4,6 +4,19 @@ title: Setup
 ---
 This page will take you through the steps you need to do to build and run the sample app locally.
 
+#### Workshop Guide
+There are 3 types of specially formatted text you will encounter throughout these guides:
+
+```
+This format is for commands to run, code to reference, or folder structures.
+```
+
+{:.fyi}
+This format is for additional information.
+
+{:.instructions}
+This format is for steps you should specifically do during the workshop.
+
 ## Prerequisites
 The app uses [Web Components](https://www.webcomponents.org/introduction), [lit-html](https://github.com/Polymer/lit-html), which is a small library for writing HTML templates with JavaScript string literals, and [lit-element](https://github.com/Polymer/lit-element), a small Web Component base class built on top of it.
 
@@ -64,12 +77,19 @@ npm install
 You're now ready to run and see your app!
 
 ### Run the app in development mode
+
+{:.instructions}
 To run the app locally, run
+
 ```
 npm start
 ```
 
-This will start a local server on port `8081`. Open [http://localhost:8081](http://localhost:8081) to view your app in the browser. Note that this server can continue running as you're making changes to your application, which you will see if you refresh the browser tab.
+This will start a local server on port `8081`.
+
+Open [http://localhost:8081](http://localhost:8081) to view your app in the browser.
+
+Note that this server can continue running as you're making changes to your application, which you will see if you refresh the browser tab.
 
 If the port is already taken on your computer, or if you need to change the default hostname (because you're using a Docker container, for example), you can configure them using command line arguments:
 ```
@@ -77,7 +97,11 @@ npm start -- --hostname 0.0.0.0 --port 4444
 ```
 
 ### Run the tests
-Check out the [Application testing]({{site.baseurl}}/application-testing) page for more information about the tests. For a quick way to run the tests, run
+Check out the [Application testing]({{site.baseurl}}/application-testing) page for more information about the tests.
+
+{:.instructions}
+For a quick way to run the tests, run
+
 ```
 npm run test
 ```
