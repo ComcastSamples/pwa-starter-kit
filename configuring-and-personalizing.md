@@ -433,4 +433,4 @@ Another popular approach is [Redux](https://redux.js.org/), which keeps the stat
 
 ## Next step
 Now that you're done some basic configuring of your application, let's go ahead and check out the next step:
-- [Redux and state management]({{site.baseurl}}/redux-and-state-management).
+- [Customizing without Redux]({{site.baseurl}}/customizing-without-redux).

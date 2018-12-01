@@ -261,7 +261,7 @@ _counterIncremented() {
 #### Exercises!
 
 {:.instructions}
-Here are two updates to make to our counter in my-view2.js:
+Here are two updates to make to our counter in my-view2.js (the same ones we did without Redux, but this time we'll do it WITH Redux):
 
 {:.instructions}
 1) Add a "Reset" button that resets the "clicked" and "value" counters to `0`.
@@ -496,5 +496,5 @@ store.subscribe(() => {
 That's it! If you want to see a demo of this in a project, the [**Flash-Cards**](https://github.com/notwaldorf/flash-cards/blob/master/src/localStorage.js) app implements this pattern.
 
 ## Next step
-Now that you have a basic understanding of Redux, it's important to note that if you're building a small app, then [you might not need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367). So let's look at how we can build this same PWA without it in the next step:
-- [Customizing without Redux]({{site.baseurl}}/customizing-without-redux).
+We now understand multiple ways to put our PWA together. Let's look at what it take to get it to production with:
+- [Building and deploying]({{site.baseurl}}/building-and-deploying/).
