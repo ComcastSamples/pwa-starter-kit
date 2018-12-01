@@ -321,13 +321,15 @@ Alternatively, you can write a helper to automatically convert any Polymer `foo-
 
 ### Reducers: slice reducers
 
-To make your app more modular, you can split the main state object into parts ("slices") and have smaller "slice reducers" operate on each part ([read more about slice reducers](https://redux.js.org/docs/recipes/reducers/SplittingReducerLogic.html)). With the `lazyReducerEnhancer`, your app can lazily add slice reducers as necessary (e.g. add the `counter` slice reducer when `my-view2.js` is imported since only `my-view2` operates on that part of the state).
+To make your app more modular, you can split the main state object into parts ("slices") and have smaller "slice reducers" operate on each part ([read more about slice reducers](https://redux.js.org/docs/recipes/reducers/SplittingReducerLogic.html)). With the [`lazyReducerEnhancer`](https://github.com/Polymer/pwa-helpers/blob/master/src/lazy-reducer-enhancer.ts), your app can lazily add slice reducers as necessary (e.g. add the [`counter`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/counter.js) slice reducer when [`my-view2.js` is imported](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-view2.js#L21-L25) since only `my-view2` operates on that part of the state).
 
 **`src/store.js:`**
 ```js
 export const store = createStore(
-  (state, action) => state,
-  compose(lazyReducerEnhancer(combineReducers), applyMiddleware(thunk))
+  state => state,
+  compose(
+    lazyReducerEnhancer(combineReducers),
+    applyMiddleware(thunk))
 );
 ```
 
@@ -408,7 +410,7 @@ class MyApp extends connect(store)(LitElement) {
 ```
 
 ### Lazy loading
-One of the main aspects of the PRPL pattern is lazy loading your application's components as they are needed. If one of these lazy-loaded elements is connected to the store, then your app needs to be able to lazy load that element's reducers as well.
+One of the main aspects of the [PRPL pattern](https://developers.google.com/web/fundamentals/performance/prpl-pattern/) is lazy loading your application's components as they are needed. If one of these lazy-loaded elements is connected to the store, then your app needs to be able to lazy load that element's reducers as well.
 
 There are many ways in which you can do this. We've implemented one of them as a [helper](https://github.com/Polymer/pwa-helpers/blob/master/src/lazy-reducer-enhancer.ts), which can be added to the store:
 ```js
@@ -418,7 +420,7 @@ import lazyReducerEnhancer from '@polymer/pwa-helpers/lazy-reducer-enhancer.js';
 import app from './reducers/app.js';
 
 export const store = createStore(
-  (state, action) => state,
+  state => state,
   compose(lazyReducerEnhancer, applyMiddleware(thunk))
 );
 
@@ -467,9 +469,11 @@ Now, in `store.js`, we basically want to use the result of `loadState()` as the 
 
 ```js
 export const store = createStore(
-  (state, action) => state,
+  state => state,
   loadState(),  // If there is local storage data, load it.
-  compose(lazyReducerEnhancer(combineReducers), applyMiddleware(thunk))
+  compose(
+    lazyReducerEnhancer(combineReducers),
+    applyMiddleware(thunk))
 );
 
 // This subscriber writes to local storage anytime the state updates.
