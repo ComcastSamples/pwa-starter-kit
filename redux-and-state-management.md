@@ -259,6 +259,18 @@ _counterIncremented() {
 ```
 - `increment` is an action creator. It is defined in `src/actions/counter.js`, and dispatches an `INCREMENT` action (and the same for `decrement`). When the store receives this action, it needs to update the state. This is done in the `src/reducers/counter.js` reducer.
 
+#### Exercises!
+
+{:.instructions}
+Here are two updates to make to our counter in my-view2.js:
+
+{:.instructions}
+1) Add a "Reset" button that resets the "clicked" and "value" counters to `0`.
+
+{:.instructions}
+2) Add a "Double Increment" toggle that causes the "+" and "-" buttons to increment/decrement by 2 when it is toggled on.
+
+
 ### Example 2: Shopping Cart
 The [shopping cart example](https://redux.js.org/docs/introduction/Examples.html#shopping-cart) is a little more complex. The main view element (`my-view3.js`) contains `<shop-products>`, a list of products that you can choose from, and `<shop-cart>`, the shopping cart. You can select products from the list to add them to the cart; each product has a limited stock, and can run out. You can perform a checkout in the cart, which has a probability of failing (which in real life could fail because of credit card validation, server errors, etc). It looks like this:
 <img width="819" alt="screen shot 2018-01-25 at 12 50 22 pm" src="https://user-images.githubusercontent.com/1369170/35411643-53dccc62-01ce-11e8-8799-6a48da8901a5.png">
