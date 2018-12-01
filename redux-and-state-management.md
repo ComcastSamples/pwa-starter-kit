@@ -176,10 +176,9 @@ export const increment = () => (dispatch, getState) => {
   const state = getState();
   const howMuch = state.counter.doubleIncrement ? 2 : 1;
   dispatch({
-      type: INCREMENT,
-      howMuch,
-    });
-  }
+    type: INCREMENT,
+    howMuch,
+  });
 };
 ```
 Or dispatch the result of another action creator:
