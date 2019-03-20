@@ -1,17 +1,17 @@
 /* Theme colors */
 a,
 h1 {
-  color: #6700DF;
+  color: #d72a15;
 }
 
 .hero {
-  background: #6700DF;
-  background: linear-gradient(315deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%), linear-gradient(315deg, #AF6AFF 0%, #6700DF 100%);
+  background: #d72a15;
+  background: linear-gradient(315deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%), linear-gradient(315deg, #ff9271 0%, #d72a15 100%);
 }
 
 .main-nav {
-  background: #6700DF;
-  background: linear-gradient(315deg, #AF6AFF 0%, #6700DF 100%);
+  background: #d72a15;
+  background: linear-gradient(315deg, #ff9271 0%, #d72a15 100%);
 }
 
 .nav-item.active {
@@ -20,6 +20,7 @@ h1 {
 
 .hero-title,
 .hero-link,
+.hero a,
 .main-nav {
   color: #fff;
 }
