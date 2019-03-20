@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Setup
+permalink: /setup
 ---
 This page will take you through the steps you need to do to build and run the sample app locally.
 
@@ -37,11 +38,11 @@ This will generate the initial project structure inside the `my-app` folder, whi
 ```
 my-app
 ├── images
-|   └── ...
+│   └── ...
 ├── src
-|   └── ...
+│   └── ...
 ├── test
-|   └── ...
+│   └── ...
 ├── index.html
 ├── README.md
 ├── package.json
@@ -109,9 +110,9 @@ npm run test
 ## Available scripts
 In the app's root directory you can run:
 - `npm start` to run the application in development mode.
-- `npm run test` to run the application's unit and integration tests (see the see the [testing section]({{site.baseurl}}/application-testing) for more details. To run just the unit or integration tests, both `npm run test:unit` and `npm run test:integration` are available.
-- `npm run build` to build your application for production (see the [building and deploying]({{site.baseurl}}/building-and-deploying) section for more details).
-- `npm run serve:static` or `npm run serve:prpl-server` to serve the built application (see the [building and deploying]({{site.baseurl}}/building-and-deploying) section for more details).
+- `npm run test` to run the application's unit and integration tests (see the see the [Application testing]({{site.baseurl}}/application-testing) section for more details. To run just the unit or integration tests, both `npm run test:unit` and `npm run test:integration` are available.
+- `npm run build` to build your application for production (see the [Building and deploying]({{site.baseurl}}/building-and-deploying) section for more details).
+- `npm run serve` to serve the built application (see the [Building and deploying]({{site.baseurl}}/building-and-deploying) section for more details).
 
 The complete list of scripts can be found in the [`package.json`](https://github.com/Polymer/pwa-starter-kit/blob/master/package.json#L10) file.
 

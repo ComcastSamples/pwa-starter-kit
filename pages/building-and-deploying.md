@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Building and deploying
+permalink: /building-and-deploying
 ---
 This page will take you through the steps you need to do to build and deploy your application to production.
 
@@ -32,7 +33,7 @@ This page will take you through the steps you need to do to build and deploy you
 To run the build:
 
 ```
-npm run build:prpl-server
+npm run build
 ```
 
 This will populate the `server/build/` directory:
@@ -53,7 +54,7 @@ server/
 To preview the build using prpl-server locally:
 
 ```
-npm run serve:prpl-server
+npm run serve
 ```
 
 ### Deploying `prpl-server`
@@ -61,14 +62,17 @@ After building, the contents of `server/` contains all the files and configurati
 
 #### App Engine
 
-##### Flexible Environment
-The contents of `server/app.yaml` is pre-configured to be deployed to [Google App Engine Node.js Flexible Environment](https://cloud.google.com/appengine/docs/flexible/nodejs/). Use the `gcloud` tool to deploy the contents of `server/` (e.g. `gcloud app deploy server/app.yaml`).
+##### Standard Environment
+The contents of `server/app.yaml` is pre-configured to be deployed to [Google App Engine Node.js Standard Environment](https://cloud.google.com/appengine/docs/standard/nodejs/). Use the `gcloud` tool to deploy the contents of `server/` (e.g. `gcloud app deploy server/app.yaml`).
 
-##### Standard Environment (Beta)
-To deploy to [Google App Engine Node.js Standard Environment (Beta)](https://cloud.google.com/appengine/docs/standard/nodejs/), replace the entire contents of `server/app.yaml` with:
+##### Flexible Environment
+To deploy to [Google App Engine Node.js Flexible Environment](https://cloud.google.com/appengine/docs/flexible/nodejs/), replace the entire contents of `server/app.yaml` with:
 
 ```yaml
-runtime: nodejs8
+runtime: nodejs
+env: flex
+automatic_scaling:
+  min_num_instances: 1
 ```
 
 Use the `gcloud` tool to deploy the contents of `server/` (e.g. `gcloud app deploy server/app.yaml`).
@@ -107,7 +111,7 @@ To preview it locally, run:
 npm run serve:static
 ```
 
-Our provided configuration will serve the `es5-bundled` build. If you don't need to support legacy browsers, you can use a more modern build by modifying the `serve:static` script in package.json to use `es6-bundled` or `esm-bundled` instead. Be sure that all page navigation requests are served the contents of `index.html`.
+Our provided configuration will serve the `es5-bundled` build. If you don't need to support legacy browsers, you can use a more modern build by modifying the `serve:static` script in [package.json](https://github.com/Polymer/pwa-starter-kit/blob/master/package.json#L14) to use `es6-bundled` or `esm-bundled` instead. Be sure that all page navigation requests are served the contents of `index.html`.
 
 ### Deploying static hosting
 By default, static hosting servers aren't set up to work with single page apps (SPAs) -- in particular, the problem is that an SPA uses routes that do not correspond to full file path names. For example, in `pwa-starter-kit` the second view's URL is `http://localhost:8081/view2`, but that doesn't correspond to a file that the browser can use. Each static hosting server has a different approach to working around this:
@@ -229,7 +233,7 @@ Click `Deploy site`.
 ## Service Worker
 A Service Worker is loaded and registered in the [`index.html`](https://github.com/Polymer/pwa-starter-kit/blob/master/index.html#L68) file. However, during development (to make debugging easier), the Service Worker does not actually exist, and only a [stub](https://github.com/Polymer/pwa-starter-kit/blob/master/service-worker.js) file is used.
 
-The production time Service Worker is automatically created during build time, i.e. by running `npm run build:static` or `npm run build:prpl-server`. This file is generated based on the [`polymer.json`](https://github.com/Polymer/pwa-starter-kit/blob/master/polymer.json) configuration file, and you can find it under each of the build directories:
+The production time Service Worker is automatically created during build time, i.e. by running `npm run build` or `npm run build:static`. This file is generated based on the [`polymer.json`](https://github.com/Polymer/pwa-starter-kit/blob/master/polymer.json) and [`sw-precache-config.js`](https://github.com/Polymer/pwa-starter-kit/blob/master/sw-precache-config.js) configuration files, and you can find it under each of the build directories:
 
 ```
 build/
