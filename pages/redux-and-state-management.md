@@ -7,29 +7,37 @@ This page will take you through the steps you need to do to use Redux to manage 
 
 ## Table of contents
 
+- [Table of contents](#table-of-contents)
 - [General principles](#general-principles)
   - [Some definitions](#some-definitions)
   - [Naming conventions](#naming-conventions)
 - [Connecting elements to the store](#connecting-elements-to-the-store)
   - [What to connect](#what-to-connect)
-  - [How to connect](#how-to-connect)
-    - [Creating a store](#creating-a-store)
-    - [Connecting an element to the store](#connecting-an-element-to-the-store)
-    - [Dispatching actions](#dispatching-actions)
-- [Case study walkthrough](##case-study-walkthrough)
+- [How to connect](#how-to-connect)
+  - [Creating a store](#creating-a-store)
+  - [Connecting an element to the store](#connecting-an-element-to-the-store)
+  - [Dispatching actions](#dispatching-actions)
+- [Case study walkthrough](#case-study-walkthrough)
   - [Example 1: Counter](#example-1-counter)
+    - [`counter-element.js`](#counter-elementjs)
+    - [`my-view2.js`](#my-view2js)
+    - [Exercises!](#exercises)
   - [Example 2: Shopping Cart](#example-2-shopping-cart)
+    - [`my-view3.js`](#my-view3js)
+    - [`shop-products.js`](#shop-productsjs)
+    - [`shop-cart.js`](#shop-cartjs)
   - [Routing](#routing)
 - [Patterns](#patterns)
-  - [Connecting dom events to action creators](#connecting-dom-events-to-action-creators)
+  - [Connecting DOM events to action creators](#connecting-dom-events-to-action-creators)
     - [Manually](#manually)
     - [Automatically](#automatically)
   - [Reducers: slice reducers](#reducers-slice-reducers)
   - [Avoid duplicate state](#avoid-duplicate-state)
   - [How to make sure third-party components don't mutate the state](#how-to-make-sure-third-party-components-dont-mutate-the-state)
   - [Routing](#routing-1)
-  - [Lazy Loading](#lazy-loading)
+  - [Lazy loading](#lazy-loading)
   - [Replicating the state for storage](#replicating-the-state-for-storage)
+- [Next step](#next-step)
 
 ## General principles
 [Redux](https://redux.js.org/) is a small state management container, that is view agnostic and widely used. It is centered around the idea of separating your application logic (the application state) from your view layer, and having the store as a single source of truth for the application state. We recommend reading some of the [Redux docs](https://redux.js.org/) for a good introduction, as well as this awesome [cartoon intro to Redux](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6) by Lin Clark.
@@ -101,7 +109,9 @@ Note that this still isn't the most basic store you can have, since it adds the 
 ```js
 export const store = createStore(
   state => state,
-  compose(lazyReducerEnhancer(combineReducers), applyMiddleware(thunk))
+  compose(
+    lazyReducerEnhancer(combineReducers),
+    applyMiddleware(thunk))
 );
 ```
 
@@ -117,19 +127,20 @@ import { store } from './store/store.js';
 
 class MyElement extends connect(store)(LitElement) {
   static get properties() { return {
-    clicks: { type: Number },
-    value: { type: Number }
+    // This is the data from the store.
+    _clicks: { type: Number },
+    _value: { type: Number },
   }}
 
   render() {
     return html`...`;
   }
 
-  // If you don't implement this method, you will get a
-  // warning in the console.
+  // This is called every time something is updated in the store.
+  // If you don't implement this method, you will get a warning in the console.
   stateChanged(state) {
-    this.clicks = state.counter.clicks;
-    this.value = state.counter.value;
+    this._clicks = state.counter.clicks;
+    this._value = state.counter.value;
   }
 }
 ```
@@ -138,8 +149,8 @@ Note that `stateChanged` gets called **any** time the store updates, not when on
 
 ```js
 stateChanged(state) {
-  if (this.clicks !== state.counter.clicks) {
-    this.clicks = state.counter.clicks;
+  if (this._clicks !== state.counter.clicks) {
+    this._clicks = state.counter.clicks;
   }
 }
 ```
@@ -172,12 +183,11 @@ An asynchronous one,
 export const increment = () => (dispatch, getState) => {
   // Do some sort of work.
   const state = getState();
-  const howMuch  = state.counter.doubleIncrement ? 2 : 1;
+  const howMuch = state.counter.doubleIncrement ? 2 : 1;
   dispatch({
-      type: INCREMENT,
-      howMuch,
-    });
-  }
+    type: INCREMENT,
+    howMuch,
+  });
 };
 ```
 Or dispatch the result of another action creator:
@@ -197,7 +207,7 @@ The goal of this walkthrough is to demonstrate how to get started with Redux, by
 The [counter](https://redux.js.org/docs/introduction/Examples.html#counter-vanilla) example is very simple: we're going to add a counter custom element (that you can imagine is a reusable, third party element) to `my-view2.js`. This example is very detailed, and goes through every line of code that needs to change. If you want a higher level example, check out Example 2. The interaction between the elements, the action creators, action, reducers and the store looks something like this:
 <img width="886" alt="screen shot 2018-01-25 at 12 44 24 pm" src="https://user-images.githubusercontent.com/1369170/35411408-7edd9d84-01cd-11e8-9044-d817dc1967da.png">
 
-#### `counter.element.js`
+#### `counter-element.js`
 This is a [plain element](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/counter-element.js) that's not connected to the Redux store. It has two properties, `clicks` and `value`, and 2 buttons that increment or decrement the value (and always increment `clicks`).
 
 #### `my-view2.js`
@@ -205,7 +215,7 @@ This element is an [app-level element](https://github.com/Polymer/pwa-starter-ki
 - Add `counter-element` to this view. Note that we pass the state **down** to the element, since the state lives in the Redux store, not in the element. We do this because even though the `counter-element` updates _its_ internal properties every time you click any of the buttons, that may not necessarily be the true state of the app -- imagine a more complex example, where a different view is also updating the value of this counter. The store is then the only source of truth for the data, and the `counter-element` must always reflect that.
 
 ```html
-<counter-element value="${this._value}" clicks="${this._clicks}"></counter-element>
+<counter-element value="${this._value}" clicks="${this._clicks}" ...></counter-element>
 ```
 - To demonstrate that it is the Redux store driving the state, and not `counter-element`'s internal, hidden state, we also added the `_value` property to the circle in the header:
 
@@ -216,7 +226,7 @@ This element is an [app-level element](https://github.com/Polymer/pwa-starter-ki
 
 ```js
 import { connect } from '@polymer/pwa-helpers/connect-mixin.js';
-class MyView2 extends connect(store)(LitElement) {
+class MyView2 extends connect(store)(PageViewElement) {
 ...
 }
 ```
@@ -240,12 +250,34 @@ stateChanged(state) {
 - Note that here both `_clicks` and `_value` start with an underscore, which means they are protected -- we don't expect anyone from _outside_ the `<my-view2>` element to want to modify them.
 - In turn, when `counter-element` updates its value (because the buttons were clicked), we listen to its change events and dispatch an action creator to the store:
 
+```html
+<counter-element value="${this._value}" clicks="${this._clicks}"
+    @counter-incremented="${this._counterIncremented}">
+</counter-element>
+```
+
+{:.fyi}
+The `@event` syntax is how you can add an event handler declaratively with LitElement.
+See [LitElement's documentation on Data bindings](https://lit-element.polymer-project.org/docs/templates/syntax) for additional special data binding abilities.
+
 ```js
-this.addEventListener('counter-incremented', function() {
+_counterIncremented() {
   store.dispatch(increment());
-})
+}
 ```
 - `increment` is an action creator. It is defined in `src/actions/counter.js`, and dispatches an `INCREMENT` action (and the same for `decrement`). When the store receives this action, it needs to update the state. This is done in the `src/reducers/counter.js` reducer.
+
+#### Exercises!
+
+{:.instructions}
+Here are two updates to make to our counter in my-view2.js (the same ones we did without Redux, but this time we'll do it WITH Redux):
+
+{:.instructions}
+1) Add a "Reset" button that resets the "clicked" and "value" counters to `0`.
+
+{:.instructions}
+2) Add a "Double Increment" toggle that causes the "+" and "-" buttons to increment/decrement by 2 when it is toggled on.
+
 
 ### Example 2: Shopping Cart
 The [shopping cart example](https://redux.js.org/docs/introduction/Examples.html#shopping-cart) is a little more complex. The main view element (`my-view3.js`) contains `<shop-products>`, a list of products that you can choose from, and `<shop-cart>`, the shopping cart. You can select products from the list to add them to the cart; each product has a limited stock, and can run out. You can perform a checkout in the cart, which has a probability of failing (which in real life could fail because of credit card validation, server errors, etc). It looks like this:
@@ -253,25 +285,24 @@ The [shopping cart example](https://redux.js.org/docs/introduction/Examples.html
 
 #### `my-view3.js`
 This is a connected element that displays both the list of products, the cart, and the Checkout button. It is only connected because it needs to display conditional UI, based on whether the cart has any items (i.e. show a Checkout button or not). This could've been an unconnected element if the Checkout button belonged to the cart, for example.
-- Pressing the Checkout button calls the `checkout` action creator. In this action creator you would do any credit cart/server validations, so if the operation cannot be completed, you would fire `CHECKOUT_FAILURE` here. We simulate that by flipping a coin, and conditionally dispatching the async action.
-- If the checkout action succeeds, then the `products` object will be updated (with the new stock), and the `cart` will be reset to its initial value (empty).
-- One thing to note: in the `src/reducers/shop.js` reducer we use a lot of slice reducers. A slice reducer is responsible for a slice (yes, really) of the whole store (for example, one product item) and updating it. To update the available stock for a specific item ID in the store, we call the `products` slide reducer (to reduce the whole store to just the products), then the `product` slice reducer for the product ID passed in the action.
+- [Pressing the Checkout button](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-view3.js#L101-L103) calls the [`checkout` action creator](https://github.com/Polymer/pwa-starter-kit/blob/master/src/actions/shop.js#L42-L56). In this action creator you would do any credit cart/server validations, so if the operation cannot be completed, you would fire `CHECKOUT_FAILURE` here. We simulate that by flipping a coin, and conditionally dispatching the async action.
+- If the checkout action succeeds, then the `products` object will be updated ([with the new stock](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/shop.js#L35-L38)), and the `cart` will be reset to its initial value ([empty](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/shop.js#L107-L108)).
+- One thing to note: in the [`src/reducers/shop.js`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/shop.js) reducer we use a lot of slice reducers. A slice reducer is responsible for a slice (yes, really) of the whole store (for example, one product item) and updating it. To update the available stock for a specific item ID in the store, we call the [`products`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/shop.js#L52-L65) slice reducer (to reduce the whole store to just the products), then the [`product`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/shop.js#L67-L82) slice reducer for the product ID passed in the action.
 
 #### `shop-products.js`
-This element gets the list of products from the store by dispatching the `getAllProducts` action creator. When the store is updated (by fetching the products from a service, for example), its `stateChanged` method is called, which populates a `products` object. Finally, this object is used to render the list of products.
-- `getAllProducts` is an action creator that simulates getting the data from a service (it doesn't, it gets it from a local object, but that's where you would out that logic). When the data is ready, it dispatches an async `GET_PRODUCTS` action.
-- Note that whenever a product is added to the cart, the `addToCart` action creator is dispatched. This updates both the `products` and `cart` objects in the Redux store, which will in turn call `stateChanged` in both `shop-products` and `shop-cart`.
-- Adding an item to the cart dispatches the `addToCart` action creator, which first double-checks the stock (on the Redux side) before actually adding the item to the cart. This is done to avoid any front-end hacks where you could add more items to the cart than in the stock 😅
+This element gets the list of products from the store by [dispatching the `getAllProducts` action creator](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/shop-products.js#L59). When the store is updated (by fetching the products from a service, for example), its [`stateChanged` method is called](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/shop-products.js#L66-L69), which populates a `_products` object. Finally, this object is used to [render the list of products](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/shop-products.js#L36-L50).
+- [`getAllProducts`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/actions/shop.js#L25-L40) is an action creator that simulates getting the data from a service (it doesn't, it gets it from a local object, but that's where you would out that logic). When the data is ready, it [dispatches an async `GET_PRODUCTS` action](https://github.com/Polymer/pwa-starter-kit/blob/master/src/actions/shop.js#L36-L39).
+- Note that whenever a product is added to the cart, the [`addToCart` action creator is dispatched](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/shop-products.js#L62-L64), which first [double-checks the stock (on the Redux side)](https://github.com/Polymer/pwa-starter-kit/blob/master/src/actions/shop.js#L60-L62) before actually adding the item to the cart. This is done to avoid any front-end hacks where you could add more items to the cart than in the stock 😅. This [dispatches](https://github.com/Polymer/pwa-starter-kit/blob/master/src/actions/shop.js#L63) the [`ADD_TO_CART` action](https://github.com/Polymer/pwa-starter-kit/blob/master/src/actions/shop.js#L76) that updates both the [`products`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/shop.js#L55-L61) and [`cart`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/shop.js#L86-L91) objects in the Redux store, which will in turn call `stateChanged` in both [`shop-products`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/shop-products.js#L66-L69) and [`shop-cart`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/shop-cart.js#L64-L68).
 
 #### `shop-cart.js`
-Similar to `shop-products`, this element is also connected to the store and observes both the `products` and `cart` state. One of the Redux rules is that there should be only one source of truth, and you should not be duplicating data. For this reason, `products` is the source of truth (that contains all the available items), and `cart` contains the indexes, and number of, items that have been added to the cart.
+Similar to `shop-products`, this element is also [connected to the store](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/shop-cart.js#L30) and observes [both the `products` and `cart` state](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/shop-cart.js#L64-L68). One of the Redux rules is that there should be only one source of truth, and you should not be duplicating data. For this reason, [`products`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/shop.js#L21) is the source of truth (that contains all the available items), and [`cart`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/shop.js#L22) contains the indexes, and number of, items that have been added to the cart.
 
 ### Routing
 We use a very simple (but flexible) redux-friendly router, that uses the window location and stores it in store. We do this by using the `installRouter` helper method provided from the `pwa-helpers` package:
 ```js
 import { installRouter } from '@polymer/pwa-helpers/router.js';
 firstUpdated() {
-  installRouter((location) => this._locationChanged(location));
+  installRouter((location) => store.dispatch(navigate(decodeURIComponent(location.pathname))));
 }
 ```
 
@@ -293,7 +324,7 @@ _onIncrement() {
 - The connected parent of `<child-element>` can listen to this event and dispatch an action to the store:
 
 ```html
-<counter-element on-counter-incremented="${() => store.dispatch(increment())}"
+<counter-element @counter-incremented="${() => store.dispatch(increment())}"
 ```
 
 Or in JavaScript,
@@ -310,13 +341,15 @@ Alternatively, you can write a helper to automatically convert any Polymer `foo-
 
 ### Reducers: slice reducers
 
-To make your app more modular, you can split the main state object into parts ("slices") and have smaller "slice reducers" operate on each part ([read more about slice reducers](https://redux.js.org/docs/recipes/reducers/SplittingReducerLogic.html)). With the `lazyReducerEnhancer`, your app can lazily add slice reducers as necessary (e.g. add the `counter` slice reducer when `my-view2.js` is imported since only `my-view2` operates on that part of the state).
+To make your app more modular, you can split the main state object into parts ("slices") and have smaller "slice reducers" operate on each part ([read more about slice reducers](https://redux.js.org/docs/recipes/reducers/SplittingReducerLogic.html)). With the [`lazyReducerEnhancer`](https://github.com/Polymer/pwa-helpers/blob/master/src/lazy-reducer-enhancer.ts), your app can lazily add slice reducers as necessary (e.g. add the [`counter`](https://github.com/Polymer/pwa-starter-kit/blob/master/src/reducers/counter.js) slice reducer when [`my-view2.js` is imported](https://github.com/Polymer/pwa-starter-kit/blob/master/src/components/my-view2.js#L21-L25) since only `my-view2` operates on that part of the state).
 
 **`src/store.js:`**
 ```js
 export const store = createStore(
   state => state,
-  compose(lazyReducerEnhancer(combineReducers), applyMiddleware(thunk))
+  compose(
+    lazyReducerEnhancer(combineReducers),
+    applyMiddleware(thunk))
 );
 ```
 
@@ -397,7 +430,7 @@ class MyApp extends connect(store)(LitElement) {
 ```
 
 ### Lazy loading
-One of the main aspects of the PRPL pattern is lazy loading your application's components as they are needed. If one of these lazy-loaded elements is connected to the store, then your app needs to be able to lazy load that element's reducers as well.
+One of the main aspects of the [PRPL pattern](https://developers.google.com/web/fundamentals/performance/prpl-pattern/) is lazy loading your application's components as they are needed. If one of these lazy-loaded elements is connected to the store, then your app needs to be able to lazy load that element's reducers as well.
 
 There are many ways in which you can do this. We've implemented one of them as a [helper](https://github.com/Polymer/pwa-helpers/blob/master/src/lazy-reducer-enhancer.ts), which can be added to the store:
 ```js
@@ -458,7 +491,9 @@ Now, in `store.js`, we basically want to use the result of `loadState()` as the 
 export const store = createStore(
   state => state,
   loadState(),  // If there is local storage data, load it.
-  compose(lazyReducerEnhancer(combineReducers), applyMiddleware(thunk))
+  compose(
+    lazyReducerEnhancer(combineReducers),
+    applyMiddleware(thunk))
 );
 
 // This subscriber writes to local storage anytime the state updates.
@@ -468,3 +503,7 @@ store.subscribe(() => {
 ```
 
 That's it! If you want to see a demo of this in a project, the [**Flash-Cards**](https://github.com/notwaldorf/flash-cards/blob/master/src/localStorage.js) app implements this pattern.
+
+## Next step
+We now understand multiple ways to put our PWA together. Let's look at what it take to get it to production with:
+- [Building and deploying]({{site.baseurl}}/building-and-deploying/).

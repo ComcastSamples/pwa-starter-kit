@@ -5,6 +5,19 @@ permalink: /setup
 ---
 This page will take you through the steps you need to do to build and run the sample app locally.
 
+#### Workshop Guide
+There are 3 types of specially formatted text you will encounter throughout these guides:
+
+```
+This format is for commands to run, code to reference, or folder structures.
+```
+
+{:.fyi}
+This format is for additional information.
+
+{:.instructions}
+This format is for steps you should specifically do during the workshop.
+
 ## Prerequisites
 The app uses [Web Components](https://www.webcomponents.org/introduction), [lit-html](https://github.com/Polymer/lit-html), which is a small library for writing HTML templates with JavaScript string literals, and [lit-element](https://github.com/Polymer/lit-element), a small Web Component base class built on top of it.
 
@@ -17,6 +30,9 @@ To create a new app that uses the default `pwa-starter-kit` template:
 git clone --depth 1 https://github.com/Polymer/pwa-starter-kit my-app
 cd my-app
 ```
+
+{:.fyi}
+Note: the `--depth 1` option will perform a [shallow clone](https://www.perforce.com/blog/git-beyond-basics-using-shallow-clones), which will clone only the current HEAD as opposed to pulling down the repo's entire history for that branch. As you may expect, this is a much faster operation.
 
 This will generate the initial project structure inside the `my-app` folder, which roughly looks like this:
 ```
@@ -44,13 +60,13 @@ Checkout the [folder structure]({{site.baseurl}}/configuring-and-personalizing#f
 To create a new app based on one of the other templates listed in [Other templates]({{site.baseurl}}/overview#other-templates), you can clone the appropriate branch from the `pwa-starter-kit` repo:
 
 ```
-git clone --depth 1 -b <template-name> --single-branch https://github.com/Polymer/pwa-starter-kit my-app
+git clone --depth 1 -b <template-name> --single-branch https://github.com/Polymer/pwa-starter-kit <folder-name>
 ```
 
-For example, to start from Typescript template (`template-typescript`):
+For example, to start from No-Redux template (`template-no-redux`):
 
 ```
-git clone --depth 1 -b template-typescript --single-branch https://github.com/Polymer/pwa-starter-kit my-app
+git clone --depth 1 -b template-no-redux --single-branch https://github.com/Polymer/pwa-starter-kit my-app-no-redux
 ```
 
 ### Installing dependencies
@@ -62,12 +78,19 @@ npm install
 You're now ready to run and see your app!
 
 ### Run the app in development mode
+
+{:.instructions}
 To run the app locally, run
+
 ```
 npm start
 ```
 
-This will start a local server on port `8081`. Open [http://localhost:8081](http://localhost:8081) to view your app in the browser. Note that this server can continue running as you're making changes to your application, which you will see if you refresh the browser tab.
+This will start a local server on port `8081`.
+
+Open [http://localhost:8081](http://localhost:8081) to view your app in the browser.
+
+Note that this server can continue running as you're making changes to your application, which you will see if you refresh the browser tab.
 
 If the port is already taken on your computer, or if you need to change the default hostname (because you're using a Docker container, for example), you can configure them using command line arguments:
 ```
@@ -75,7 +98,11 @@ npm start -- --hostname 0.0.0.0 --port 4444
 ```
 
 ### Run the tests
-Check out the [Application testing]({{site.baseurl}}/application-testing) page for more information about the tests. For a quick way to run the tests, run
+Check out the [Application testing]({{site.baseurl}}/application-testing) page for more information about the tests.
+
+{:.instructions}
+For a quick way to run the tests, run
+
 ```
 npm run test
 ```
@@ -92,7 +119,6 @@ The complete list of scripts can be found in the [`package.json`](https://github
 ## Browser support
 `pwa-starter-kit` uses fairly recent browsers APIs, that might not be natively available on all of the browsers you are supporting. To get around that, the app relies on polyfills, to add the missing web platform features to some browsers, as well as a build step, to add newer JavaScript features to browsers that don't support them (such as transpiling ES6 to ES5 for browsers like IE11, or dynamic module imports). Check out the [Browser Support]({{site.baseurl}}/browser-support) page for more details.
 
-## Next steps
-Now that you're done with the basics of running your app, check out the next steps:
+## Next step
+Now that you're done with the basics of running your app, check out the next step:
 - [Configuring and personalizing]({{site.baseurl}}/configuring-and-personalizing) the app by modifying and adding your own content
-- [Building and deploying]({{site.baseurl}}/building-and-deploying) to production
